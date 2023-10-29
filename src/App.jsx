@@ -10,6 +10,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [number_of_cards, setNumberOfCards] = useState(5);
   const [clicked_cards, setClickedCards] = useState(new Set());
+  const [game_state, setGameState] = useState("in play");
   console.log(clicked_cards);
 
   const getRandomRAWGPage = async () => {
@@ -50,6 +51,7 @@ function App() {
   const generateResultArray = async (number_of_games) => {
     const games_array = await getRandomRAWGPage();
     const selected_games = getRandomItems(games_array, number_of_games);
+    setGameState("in play");
     setResults(selected_games);
     setClickedCards(new Set());
   };
@@ -77,9 +79,34 @@ function App() {
   const clickCard = (e) => {
     // console.log(e.target.lastChild.textContent);
     const new_cards = new Set(clicked_cards);
+    if (new_cards.has(e.target.lastChild.textContent)) {
+      setGameState("loss");
+    }
     new_cards.add(e.target.lastChild.textContent);
-    setClickedCards(new_cards);
+    if (new_cards.size === number_of_cards) {
+      setGameState("win");
+    } else {
+      setClickedCards(new_cards);
+    }
     // console.log(clicked_cards);
+  };
+
+  const handleGame = (gameState) => {
+    if (gameState === "in play") {
+      setResults(shuffle(results));
+    }
+    if (gameState === "loss") {
+      console.log("Game lost");
+      setResults([]);
+      setClickedCards(new Set());
+      setGameState("menu");
+    }
+    if (gameState === "win") {
+      console.log("Game Won");
+      setResults([]);
+      setClickedCards(new Set());
+      setGameState("menu");
+    }
   };
 
   return (
@@ -92,6 +119,8 @@ function App() {
         shuffle={shuffle}
         clickedCards={clicked_cards}
         clickCard={clickCard}
+        gameState={game_state}
+        handleGame={handleGame}
       />
     </div>
   );

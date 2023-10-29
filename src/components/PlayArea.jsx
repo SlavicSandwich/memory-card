@@ -8,12 +8,16 @@ export default function PlayArea({
   shuffle,
   clickedCards,
   clickCard,
+  gameState,
+  handleGame,
 }) {
   useEffect(() => {
     console.log("effect triggered");
-    setResults(shuffle(results));
-  }, [clickedCards]);
+    handleGame(gameState);
+  }, [clickedCards, gameState]);
+
   console.log(results);
+
   return (
     <main className="play-area">
       <ScoreProgress />

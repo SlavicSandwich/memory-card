@@ -3,12 +3,14 @@ import "./App.css";
 import Header from "./components/Header";
 import PlayArea from "./components/PlayArea";
 const api_key = "cb9ac62f19e6479f95a9f97f416cfeeb";
-
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+};
 function App() {
   const [results, setResults] = useState([]);
-  const getRandomInt = (max) => {
-    return Math.floor(Math.random() * max);
-  };
+  const [number_of_cards, setNumberOfCards] = useState(5);
+  const [clicked_cards, setClickedCards] = useState(new Set());
+  console.log(clicked_cards);
 
   const getRandomRAWGPage = async () => {
     const amount_of_iterations = getRandomInt(10);
@@ -26,12 +28,71 @@ function App() {
       }
       res_obj = await res.json();
     }
-    setResults(res_obj.results);
+    return res_obj.results;
   };
+
+  const getRandomItems = (arr, n) => {
+    let len = arr.length;
+    const result = new Array(n),
+      taken = new Set();
+    if (n > len)
+      throw new RangeError(
+        "Amount of elements to randomly select is bigger than length of an arrray"
+      );
+    while (n--) {
+      const x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result;
+  };
+
+  const generateResultArray = async (number_of_games) => {
+    const games_array = await getRandomRAWGPage();
+    const selected_games = getRandomItems(games_array, number_of_games);
+    setResults(selected_games);
+    setClickedCards(new Set());
+  };
+
+  function shuffle(array) {
+    let currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
+
+  const clickCard = (e) => {
+    // console.log(e.target.lastChild.textContent);
+    const new_cards = new Set(clicked_cards);
+    new_cards.add(e.target.lastChild.textContent);
+    setClickedCards(new_cards);
+    // console.log(clicked_cards);
+  };
+
   return (
     <div className="app">
       <Header />
-      <PlayArea imageFetcher={getRandomRAWGPage} results={results} />
+      <PlayArea
+        imageFetcher={() => generateResultArray(number_of_cards)}
+        results={results}
+        setResults={setResults}
+        shuffle={shuffle}
+        clickedCards={clicked_cards}
+        clickCard={clickCard}
+      />
     </div>
   );
 }

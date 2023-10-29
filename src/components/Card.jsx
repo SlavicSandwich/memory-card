@@ -1,8 +1,8 @@
-export default function Card() {
+export default function Card({ game }) {
   return (
     <button className="card">
-      <img />
-      <span>Card</span>
+      <img src={game.background_image} />
+      <span>{game.name}</span>
     </button>
   );
 }

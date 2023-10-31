@@ -1,6 +1,7 @@
 import ScoreProgress from "./ScoreProgress";
 import CardGrid from "./CardGrid";
 import { useEffect } from "react";
+import "../css/main.css";
 export default function PlayArea({
   imageFetcher,
   results,

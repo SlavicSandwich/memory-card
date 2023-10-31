@@ -1,11 +1,28 @@
 import { useState } from "react";
-import "./App.css";
+import "./css/App.css";
 import Header from "./components/Header";
 import PlayArea from "./components/PlayArea";
 const api_key = "cb9ac62f19e6479f95a9f97f416cfeeb";
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max);
 };
+
+// const setBackgroundImage = async () => {
+//   const res = await fetch(
+//     `https://rawg.io/api/games?token&key=${api_key}&page=${1}`
+//   );
+//   const res_obj = await res.json();
+//   const game = res_obj.results[getRandomInt(20)];
+//   document.body.style.backgroundImage = `url(${game.background_image})`;
+// };
+// // const arr = await getRandomRAWGPage();
+// // document.body.style.backgroundImage = `url(${
+// //   getRandomRAWGPage(2)[getRandomInt(20)].background_image
+// // })`;
+// // console.log(arr);
+// // console.log(getRandomRAWGPage());
+// setBackgroundImage();
+
 function App() {
   const [results, setResults] = useState([]);
   const [number_of_cards, setNumberOfCards] = useState(5);
@@ -129,21 +146,36 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <Header score={score} highScore={highScore} />
-      <PlayArea
-        imageFetcher={() => generateResultArray(number_of_cards)}
-        results={results}
-        setResults={setResults}
-        shuffle={shuffle}
-        clickedCards={clicked_cards}
-        clickCard={clickCard}
-        gameState={game_state}
-        handleGame={handleGame}
-        numberOfCards={number_of_cards}
-      />
-    </div>
+    <>
+      <div className="bg-image"></div>
+      <div className="app">
+        <Header score={score} highScore={highScore} />
+        <PlayArea
+          imageFetcher={() => generateResultArray(number_of_cards)}
+          results={results}
+          setResults={setResults}
+          shuffle={shuffle}
+          clickedCards={clicked_cards}
+          clickCard={clickCard}
+          gameState={game_state}
+          handleGame={handleGame}
+          numberOfCards={number_of_cards}
+        />
+      </div>
+    </>
   );
 }
 
+const setBackgroundImage = async () => {
+  const res = await fetch(
+    `https://rawg.io/api/games?token&key=${api_key}&page=${1}`
+  );
+  const res_obj = await res.json();
+  const game = res_obj.results[getRandomInt(20)];
+  document.querySelector(
+    ".bg-image"
+  ).style.backgroundImage = `url(${game.background_image})`;
+};
+
+setBackgroundImage();
 export default App;

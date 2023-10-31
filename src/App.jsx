@@ -15,25 +15,32 @@ function App() {
   const [highScore, setHighScore] = useState(0);
   console.log(clicked_cards);
 
+  // const getRandomRAWGPage = async () => {
+  //   const amount_of_iterations = getRandomInt(10);
+  //   let first_request = true;
+  //   let res, res_obj;
+  //   //Due to the fact that API returns only 20 games per fetch,
+  //   //it is required to make sequential random amount of fetches,
+  //   //to get Radnom set of game per new game.
+  //   for (let i = 0; i < amount_of_iterations + 1; i++) {
+  //     if (first_request) {
+  //       res = await fetch(`https://rawg.io/api/games?token&key=${api_key}`);
+  //       first_request = false;
+  //     } else {
+  //       res = await fetch(res_obj.next);
+  //     }
+  //     res_obj = await res.json();
+  //   }
+  //   return res_obj.results;
+  // };
+
   const getRandomRAWGPage = async () => {
-    const amount_of_iterations = getRandomInt(10);
-    let first_request = true;
-    let res, res_obj;
-    //Due to the fact that API returns only 20 games per fetch,
-    //it is required to make sequential random amount of fetches,
-    //to get Radnom set of game per new game.
-    for (let i = 0; i < amount_of_iterations + 1; i++) {
-      if (first_request) {
-        res = await fetch(`https://rawg.io/api/games?token&key=${api_key}`);
-        first_request = false;
-      } else {
-        res = await fetch(res_obj.next);
-      }
-      res_obj = await res.json();
-    }
+    const res = await fetch(
+      `https://rawg.io/api/games?token&key=${api_key}&page=${getRandomInt(100)}`
+    );
+    const res_obj = await res.json();
     return res_obj.results;
   };
-
   const getRandomItems = (arr, n) => {
     let len = arr.length;
     const result = new Array(n),

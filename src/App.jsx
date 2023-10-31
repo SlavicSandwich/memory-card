@@ -10,7 +10,9 @@ function App() {
   const [results, setResults] = useState([]);
   const [number_of_cards, setNumberOfCards] = useState(5);
   const [clicked_cards, setClickedCards] = useState(new Set());
-  const [game_state, setGameState] = useState("in play");
+  const [game_state, setGameState] = useState("menu");
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
   console.log(clicked_cards);
 
   const getRandomRAWGPage = async () => {
@@ -81,12 +83,18 @@ function App() {
     const new_cards = new Set(clicked_cards);
     if (new_cards.has(e.target.lastChild.textContent)) {
       setGameState("loss");
+      setScore(0);
+      return;
     }
     new_cards.add(e.target.lastChild.textContent);
     if (new_cards.size === number_of_cards) {
       setGameState("win");
+      setScore(score + 1);
+      setHighScore(score + 1 > highScore ? score + 1 : highScore);
     } else {
       setClickedCards(new_cards);
+      setScore(score + 1);
+      setHighScore(score + 1 > highScore ? score + 1 : highScore);
     }
     // console.log(clicked_cards);
   };
@@ -94,24 +102,28 @@ function App() {
   const handleGame = (gameState) => {
     if (gameState === "in play") {
       setResults(shuffle(results));
+      // setScore(clicked_cards.size);
+      // setHighScore(score + 1 > highScore ? score + 1 : highScore);
     }
     if (gameState === "loss") {
       console.log("Game lost");
       setResults([]);
       setClickedCards(new Set());
       setGameState("menu");
+      setScore(0);
     }
     if (gameState === "win") {
       console.log("Game Won");
       setResults([]);
       setClickedCards(new Set());
       setGameState("menu");
+      // setHighScore(score + 1 > highScore ? score + 1 : highScore);
     }
   };
 
   return (
     <div className="app">
-      <Header />
+      <Header score={score} highScore={highScore} />
       <PlayArea
         imageFetcher={() => generateResultArray(number_of_cards)}
         results={results}
@@ -121,6 +133,7 @@ function App() {
         clickCard={clickCard}
         gameState={game_state}
         handleGame={handleGame}
+        numberOfCards={number_of_cards}
       />
     </div>
   );

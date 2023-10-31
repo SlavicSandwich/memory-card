@@ -10,6 +10,7 @@ export default function PlayArea({
   clickCard,
   gameState,
   handleGame,
+  numberOfCards,
 }) {
   useEffect(() => {
     console.log("effect triggered");
@@ -20,7 +21,10 @@ export default function PlayArea({
 
   return (
     <main className="play-area">
-      <ScoreProgress />
+      <ScoreProgress
+        numberOfCards={numberOfCards}
+        guesses={clickedCards.size}
+      />
       {results.length > 0 ? (
         <CardGrid results={results} clickCard={clickCard} />
       ) : (

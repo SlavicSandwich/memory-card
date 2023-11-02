@@ -1,0 +1,20 @@
+.header {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.statistic {
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  color: rgb(41, 39, 39);
+}
+
+.statistic .high-score {
+  display: flex;
+  white-space: pre-wrap;
+}

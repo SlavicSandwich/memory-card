@@ -1,3 +1,4 @@
+import "../css/header.css";
 export default function Header({ score, highScore }) {
   return (
     <header className="header">

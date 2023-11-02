@@ -2,10 +2,14 @@ import { useState } from "react";
 import "./css/App.css";
 import Header from "./components/Header";
 import PlayArea from "./components/PlayArea";
+import logo from "./assets/Jacko-guilty-gear-unscreen.gif";
+import LoadingScreen from "./components/LoadingScreen";
 const api_key = "cb9ac62f19e6479f95a9f97f416cfeeb";
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max);
 };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const MIN_LOAD_TIME = 250;
 
 // const setBackgroundImage = async () => {
 //   const res = await fetch(
@@ -30,6 +34,7 @@ function App() {
   const [game_state, setGameState] = useState("menu");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [loading, setLoading] = useState(false);
   console.log(clicked_cards);
 
   // const getRandomRAWGPage = async () => {
@@ -75,11 +80,14 @@ function App() {
   };
 
   const generateResultArray = async (number_of_games) => {
+    setLoading(true);
+    await sleep(MIN_LOAD_TIME);
     const games_array = await getRandomRAWGPage();
     const selected_games = getRandomItems(games_array, number_of_games);
     setGameState("in play");
     setResults(selected_games);
     setClickedCards(new Set());
+    setLoading(false);
   };
 
   function shuffle(array) {
@@ -149,18 +157,24 @@ function App() {
     <>
       <div className="bg-image"></div>
       <div className="app">
-        <Header score={score} highScore={highScore} />
-        <PlayArea
-          imageFetcher={() => generateResultArray(number_of_cards)}
-          results={results}
-          setResults={setResults}
-          shuffle={shuffle}
-          clickedCards={clicked_cards}
-          clickCard={clickCard}
-          gameState={game_state}
-          handleGame={handleGame}
-          numberOfCards={number_of_cards}
-        />
+        {loading ? (
+          <LoadingScreen />
+        ) : (
+          <>
+            <Header score={score} highScore={highScore} />
+            <PlayArea
+              imageFetcher={() => generateResultArray(number_of_cards)}
+              results={results}
+              setResults={setResults}
+              shuffle={shuffle}
+              clickedCards={clicked_cards}
+              clickCard={clickCard}
+              gameState={game_state}
+              handleGame={handleGame}
+              numberOfCards={number_of_cards}
+            />
+          </>
+        )}
       </div>
     </>
   );

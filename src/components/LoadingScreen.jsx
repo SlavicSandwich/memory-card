@@ -1,4 +1,5 @@
-import logo from "../assets/Jacko-guilty-gear-unscreen.gif";
+import logo from "../assets/Scorpion mortal kombat 12.gif";
+import "../css/loadingScreen.css";
 export default function LoadingScreen() {
   return (
     <div className="loading-screen">

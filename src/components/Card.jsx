@@ -4,8 +4,11 @@ export default function Card({ game, onClick }) {
 
   return (
     <button className="card" onClick={onClick}>
-      <img src={game.background_image} className="card-image" />
-      <span className="card-name">{game.name}</span>
+      <img
+        src={game.background_image}
+        className="card-image pointer-events-none"
+      />
+      <div className="card-name pointer-events-none">{game.name}</div>
     </button>
   );
 }

@@ -2,15 +2,16 @@ import { useState } from "react";
 import "./css/App.css";
 import Header from "./components/Header";
 import PlayArea from "./components/PlayArea";
-import logo from "./assets/Jacko-guilty-gear-unscreen.gif";
 import LoadingScreen from "./components/LoadingScreen";
+import StartScreen from "./components/StartScreen";
+import GameOverModal from "./components/GameOverModal";
 const api_key = "cb9ac62f19e6479f95a9f97f416cfeeb";
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max);
 };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const MIN_LOAD_TIME = 250;
-
+// const MIN_LOAD_TIME = 250;
+const MIN_LOAD_TIME = 1000;
 // const setBackgroundImage = async () => {
 //   const res = await fetch(
 //     `https://rawg.io/api/games?token&key=${api_key}&page=${1}`
@@ -115,7 +116,7 @@ function App() {
     const new_cards = new Set(clicked_cards);
     if (new_cards.has(e.target.lastChild.textContent)) {
       setGameState("loss");
-      setScore(0);
+      // setScore(0);
       return;
     }
     new_cards.add(e.target.lastChild.textContent);
@@ -123,6 +124,7 @@ function App() {
       setGameState("win");
       setScore(score + 1);
       setHighScore(score + 1 > highScore ? score + 1 : highScore);
+      setClickedCards(new_cards);
     } else {
       setClickedCards(new_cards);
       setScore(score + 1);
@@ -137,20 +139,36 @@ function App() {
       // setScore(clicked_cards.size);
       // setHighScore(score + 1 > highScore ? score + 1 : highScore);
     }
-    if (gameState === "loss") {
-      console.log("Game lost");
-      setResults([]);
-      setClickedCards(new Set());
-      setGameState("menu");
-      setScore(0);
-    }
-    if (gameState === "win") {
-      console.log("Game Won");
-      setResults([]);
-      setClickedCards(new Set());
-      setGameState("menu");
-      // setHighScore(score + 1 > highScore ? score + 1 : highScore);
-    }
+    // if (gameState === "loss") {
+    //   console.log("Game lost");
+    //   setResults([]);
+    //   setClickedCards(new Set());
+    //   // setGameState("menu");
+    //   setScore(0);
+    // }
+    // if (gameState === "win") {
+    //   console.log("Game Won");
+    //   setResults([]);
+    //   setClickedCards(new Set());
+    //   // setGameState("menu");
+    //   // setHighScore(score + 1 > highScore ? score + 1 : highScore);
+    // }
+  };
+
+  const handleContinue = () => {
+    setNumberOfCards(number_of_cards + 1);
+    generateResultArray(number_of_cards + 1);
+  };
+
+  const handlePlayAgain = () => {
+    setGameState("in play");
+    generateResultArray(number_of_cards);
+    setScore(0);
+  };
+
+  const handleQuit = () => {
+    setGameState("menu");
+    setScore(0);
   };
 
   return (
@@ -159,8 +177,25 @@ function App() {
       <div className="app">
         {loading ? (
           <LoadingScreen />
+        ) : game_state === "menu" ? (
+          <StartScreen
+            onStart={(number_of_cards) => {
+              setGameState("in play");
+              setNumberOfCards(number_of_cards);
+              generateResultArray(number_of_cards);
+            }}
+          />
         ) : (
           <>
+            {(game_state === "win" || game_state === "loss") && (
+              <GameOverModal
+                status={game_state}
+                score={score}
+                onPlayAgain={handlePlayAgain}
+                onQuit={handleQuit}
+                onContinue={handleContinue}
+              />
+            )}
             <Header score={score} highScore={highScore} />
             <PlayArea
               imageFetcher={() => generateResultArray(number_of_cards)}

@@ -23,7 +23,7 @@ export default function PlayArea({
   return (
     <main className="play-area">
       <ScoreProgress
-        numberOfCards={numberOfCards}
+        numberOfCards={results.length}
         guesses={clickedCards.size}
       />
       {results.length > 0 ? (
@@ -32,7 +32,7 @@ export default function PlayArea({
         ""
       )}
       {/* <CardGrid results={results} /> */}
-      <button onClick={imageFetcher} />
+      {/* <button onClick={imageFetcher} /> */}
     </main>
   );
 }

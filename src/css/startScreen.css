@@ -1,0 +1,65 @@
+.start-screen-modal-content {
+  padding: 16px;
+}
+
+.ask-text {
+  overflow: hidden;
+  border-right: 0.1em solid black;
+  margin: 0 auto;
+  letter-spacing: -0.05em;
+  animation: typing 0.9s steps(60, end), blink-caret 0.75s step-end infinite;
+  text-align: center;
+}
+
+.start-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.start-screen-modal-content form {
+  margin-top: 24px;
+  animation: appear 0.9s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.difficulty-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 8px 0;
+  letter-spacing: -0.08em;
+}
+
+@keyframes appear {
+  0% {
+    visibility: hidden;
+  }
+
+  100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes typing {
+  from {
+    white-space: nowrap;
+    width: 0;
+  }
+  to {
+    white-space: nowrap;
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: black;
+  }
+}

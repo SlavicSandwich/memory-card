@@ -67,6 +67,10 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+@font-face {
+  font-family: Kombat;
+  src: url("../assets/Mortal-Kombat-MK11.ttf");
+}
 
 * {
   box-sizing: border-box;
